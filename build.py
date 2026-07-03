@@ -154,7 +154,19 @@ def render_base(page_title: str, content: str, description: str = "") -> str:
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="{escape_attr(description)}">
+  <meta name="color-scheme" content="light dark">
   <title>{html.escape(title)}</title>
+  <script>
+    (() => {{
+      let theme = null;
+      try {{
+        theme = localStorage.getItem("theme");
+      }} catch {{}}
+      if (theme === "light" || theme === "dark") {{
+        document.documentElement.dataset.theme = theme;
+      }}
+    }})();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Marcellus&family=Quattrocento+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
@@ -163,11 +175,59 @@ def render_base(page_title: str, content: str, description: str = "") -> str:
 <body>
 <header>
   <h1><a class="site-title" href="/">{html.escape(SITE_TITLE)}</a></h1>
-  <p>{html.escape(SITE_TAGLINE)}</p>
+  <p class="header-meta">
+    <span>{html.escape(SITE_TAGLINE)}</span>
+    <button class="theme-toggle" type="button" data-theme-toggle hidden>◐</button>
+  </p>
 </header>
 <main class="page-content" aria-label="Content">
 {content}
 </main>
+<script>
+  (() => {{
+    const button = document.querySelector("[data-theme-toggle]");
+    if (!button) return;
+
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const storedTheme = () => {{
+      try {{
+        return localStorage.getItem("theme");
+      }} catch {{
+        return null;
+      }}
+    }};
+    const storeTheme = theme => {{
+      try {{
+        localStorage.setItem("theme", theme);
+      }} catch {{}}
+    }};
+    const systemTheme = () => media.matches ? "dark" : "light";
+    const currentTheme = () => {{
+      const theme = storedTheme();
+      return theme === "light" || theme === "dark" ? theme : systemTheme();
+    }};
+    const syncButton = () => {{
+      const theme = currentTheme();
+      const nextTheme = theme === "dark" ? "light" : "dark";
+      button.setAttribute("aria-label", `Switch to ${{nextTheme}} mode`);
+      button.setAttribute("title", `Switch to ${{nextTheme}} mode`);
+      button.hidden = false;
+    }};
+
+    button.addEventListener("click", () => {{
+      const nextTheme = currentTheme() === "dark" ? "light" : "dark";
+      document.documentElement.dataset.theme = nextTheme;
+      storeTheme(nextTheme);
+      syncButton();
+    }});
+
+    media.addEventListener("change", () => {{
+      if (storedTheme() !== "light" && storedTheme() !== "dark") syncButton();
+    }});
+
+    syncButton();
+  }})();
+</script>
 </body>
 </html>
 """

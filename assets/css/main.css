@@ -1,3 +1,58 @@
+/* Warm paper palette, with a low-glare dark variant for readers. */
+:root {
+  color-scheme: light dark;
+  --color-bg: #e8e4db;
+  --color-text: #3d3935;
+  --color-link: #7a6854;
+  --color-link-hover: #5c503f;
+  --color-link-border: #b5aea3;
+  --color-link-border-hover: #8b7f6f;
+  --color-target-bg: #d9d4c8;
+  --color-border: #c2bdb0;
+  --color-rule: #9a9287;
+  --color-muted-bg: #ddd9cf;
+  --color-accent: #9d7b5a;
+  --color-quote-accent: #b8754e;
+  --color-code-bg: #35322e;
+  --color-code-text: #d6d2c7;
+}
+
+:root[data-theme="dark"] {
+  --color-bg: #1d1b18;
+  --color-text: #d9d2c6;
+  --color-link: #c4af92;
+  --color-link-hover: #e0cfb6;
+  --color-link-border: #6e6253;
+  --color-link-border-hover: #a89073;
+  --color-target-bg: #2b2822;
+  --color-border: #514a40;
+  --color-rule: #837767;
+  --color-muted-bg: #27241f;
+  --color-accent: #b49a76;
+  --color-quote-accent: #c48a65;
+  --color-code-bg: #12110f;
+  --color-code-text: #d8d0c2;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-bg: #1d1b18;
+    --color-text: #d9d2c6;
+    --color-link: #c4af92;
+    --color-link-hover: #e0cfb6;
+    --color-link-border: #6e6253;
+    --color-link-border-hover: #a89073;
+    --color-target-bg: #2b2822;
+    --color-border: #514a40;
+    --color-rule: #837767;
+    --color-muted-bg: #27241f;
+    --color-accent: #b49a76;
+    --color-quote-accent: #c48a65;
+    --color-code-bg: #12110f;
+    --color-code-text: #d8d0c2;
+  }
+}
+
 html {
   height: 100%;
   font-size: 17px;
@@ -11,20 +66,20 @@ body {
   word-wrap: break-word;
   hyphens: auto;
   line-height: 1.65;
-  color: #3d3935;
-  background-color: #e8e4db;
+  color: var(--color-text);
+  background-color: var(--color-bg);
   font-family: "Quattrocento Sans", sans-serif;
 }
 
 a {
-  color: #7a6854;
+  color: var(--color-link);
   text-decoration: none;
-  border-bottom: 1px solid #b5aea3;
+  border-bottom: 1px solid var(--color-link-border);
 }
 
 a:hover {
-  color: #5c503f;
-  border-bottom-color: #8b7f6f;
+  color: var(--color-link-hover);
+  border-bottom-color: var(--color-link-border-hover);
 }
 
 .site-title {
@@ -57,6 +112,37 @@ main {
 
 header p {
   font-style: italic;
+}
+
+.header-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0;
+}
+
+.header-meta span {
+  font-style: italic;
+}
+
+.theme-toggle {
+  padding: 0;
+  color: var(--color-link);
+  background: none;
+  border: 0;
+  border-bottom: 0;
+  border-radius: 0;
+  font: inherit;
+  font-style: normal;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.theme-toggle:hover,
+.theme-toggle:focus-visible {
+  color: var(--color-link-hover);
+  border-bottom: 0;
 }
 
 h1,
@@ -110,7 +196,7 @@ img {
 }
 
 *:target {
-  background: #d9d4c8;
+  background: var(--color-target-bg);
 }
 
 .post-meta {
@@ -146,7 +232,7 @@ ul#post-list {
 .post-list-link.list-header,
 .post-list-series.list-header {
   font-weight: 700;
-  border-bottom: 2px solid #9a9287;
+  border-bottom: 2px solid var(--color-rule);
 }
 
 .archive-row .post-list-link {
@@ -160,15 +246,15 @@ table {
 table,
 th,
 td {
-  border: 1px solid #c2bdb0;
+  border: 1px solid var(--color-border);
   border-collapse: collapse;
   padding: 0.4rem;
 }
 
 th {
-  background: #ddd9cf;
+  background: var(--color-muted-bg);
   font-weight: 700;
-  border-top: 3px solid #9d7b5a;
+  border-top: 3px solid var(--color-accent);
 }
 
 pre,
@@ -180,24 +266,24 @@ code {
 pre {
   overflow-x: auto;
   padding: 1em;
-  color: #d6d2c7;
-  background: #35322e;
-  border-left: 3px solid #8b6f54;
+  color: var(--color-code-text);
+  background: var(--color-code-bg);
+  border-left: 3px solid var(--color-link-border-hover);
 }
 
 code:not(pre > code) {
   padding: 0.1em 0.2em;
   font-size: 90%;
-  color: #3d3935;
-  background: #ddd9cf;
+  color: var(--color-text);
+  background: var(--color-muted-bg);
 }
 
 blockquote {
   padding: 1.2rem;
   font-style: italic;
-  background: #ddd9cf;
-  border: 2px solid #9a9287;
-  border-left: 4px solid #b8754e;
+  background: var(--color-muted-bg);
+  border: 2px solid var(--color-rule);
+  border-left: 4px solid var(--color-quote-accent);
 }
 
 blockquote p {
