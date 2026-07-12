@@ -2,9 +2,11 @@
 from __future__ import annotations
 
 import datetime as dt
+import email.utils
 import html
 import re
 import shutil
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 
@@ -18,6 +20,7 @@ SITE_TAGLINE = "writing, mostly about technology"
 SITE_URL = "https://ameeer.in"
 LINKEDIN_URL = "https://www.linkedin.com/in/ameerraja/"
 GITHUB_URL = "https://github.com/ameeer-in"
+RSS_PATH = "/index.xml"
 
 
 def clean_site() -> None:
@@ -171,6 +174,7 @@ def render_base(page_title: str, content: str, description: str = "") -> str:
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Marcellus&family=Quattrocento+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="alternate" type="application/rss+xml" title="{escape_attr(SITE_TITLE)}" href="{RSS_PATH}">
 </head>
 <body>
 <header>
@@ -304,9 +308,56 @@ def render_index(posts: list[dict[str, object]]) -> None:
         [
             '<p><a href="/about/">about</a></p>',
             post_list(posts[:5], include_archive=True),
+            f'<p><a href="{RSS_PATH}">rss</a></p>',
         ]
     )
     write_page(SITE / "index.html", render_base(SITE_TITLE, content))
+
+
+def render_rss(posts: list[dict[str, object]]) -> None:
+    ET.register_namespace("atom", "http://www.w3.org/2005/Atom")
+    rss = ET.Element("rss", {"version": "2.0"})
+    channel = ET.SubElement(rss, "channel")
+    ET.SubElement(channel, "title").text = SITE_TITLE
+    ET.SubElement(channel, "link").text = SITE_URL
+    ET.SubElement(channel, "description").text = SITE_TAGLINE
+    ET.SubElement(channel, "language").text = "en"
+    ET.SubElement(
+        channel,
+        "{http://www.w3.org/2005/Atom}link",
+        {
+            "href": f"{SITE_URL}{RSS_PATH}",
+            "rel": "self",
+            "type": "application/rss+xml",
+        },
+    )
+
+    if posts:
+        newest = posts[0]["date"]
+        assert isinstance(newest, dt.date)
+        newest_datetime = dt.datetime.combine(newest, dt.time(), tzinfo=dt.UTC)
+        ET.SubElement(channel, "lastBuildDate").text = email.utils.format_datetime(
+            newest_datetime, usegmt=True
+        )
+
+    for post in posts:
+        published = post["date"]
+        assert isinstance(published, dt.date)
+        published_datetime = dt.datetime.combine(published, dt.time(), tzinfo=dt.UTC)
+        post_url = f"{SITE_URL}{post['url']}"
+
+        item = ET.SubElement(channel, "item")
+        ET.SubElement(item, "title").text = str(post["title"])
+        ET.SubElement(item, "link").text = post_url
+        ET.SubElement(item, "guid", {"isPermaLink": "true"}).text = post_url
+        ET.SubElement(item, "pubDate").text = email.utils.format_datetime(
+            published_datetime, usegmt=True
+        )
+        ET.SubElement(item, "description").text = str(post["description"])
+
+    ET.indent(rss, space="  ")
+    tree = ET.ElementTree(rss)
+    tree.write(SITE / RSS_PATH.lstrip("/"), encoding="utf-8", xml_declaration=True)
 
 
 def render_archive(posts: list[dict[str, object]]) -> None:
@@ -373,6 +424,7 @@ def main() -> None:
     clean_site()
     posts = load_posts()
     render_index(posts)
+    render_rss(posts)
     render_archive(posts)
     render_posts(posts)
     render_about()
