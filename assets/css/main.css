@@ -230,12 +230,22 @@ ul#post-list {
 }
 
 .post-list-date,
-.post-list-link,
 .post-list-series {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.post-list-link {
+  display: block;
+  min-width: 0;
+  align-self: start;
+  line-height: 1.45;
+  white-space: normal;
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
 }
 
 .post-list-date.list-header,
