@@ -113,6 +113,18 @@ def markdown_to_html(markdown: str) -> str:
             i += 1
             continue
 
+        interactive = re.match(r"^\[INTERACTIVE:\s*([a-z0-9-]+)\]$", line.strip())
+        if interactive:
+            flush_paragraph()
+            name = interactive.group(1)
+            title = name.replace("-", " ").title()
+            blocks.append(
+                f'<iframe class="interactive-frame" src="/assets/interactive/{name}/" '
+                f'title="{escape_attr(title)}" loading="lazy"></iframe>'
+            )
+            i += 1
+            continue
+
         heading = re.match(r"^(#{1,6})\s+(.+)$", line)
         if heading:
             flush_paragraph()
@@ -210,6 +222,11 @@ def render_base(page_title: str, content: str, description: str = "") -> str:
       const theme = storedTheme();
       return theme === "light" || theme === "dark" ? theme : systemTheme();
     }};
+    const syncInteractiveFrames = theme => {{
+      document.querySelectorAll(".interactive-frame").forEach(frame => {{
+        frame.contentWindow?.postMessage({{ type: "interactive-theme", theme }}, location.origin);
+      }});
+    }};
     const syncButton = () => {{
       const theme = currentTheme();
       const nextTheme = theme === "dark" ? "light" : "dark";
@@ -223,13 +240,28 @@ def render_base(page_title: str, content: str, description: str = "") -> str:
       document.documentElement.dataset.theme = nextTheme;
       storeTheme(nextTheme);
       syncButton();
+      syncInteractiveFrames(nextTheme);
     }});
 
     media.addEventListener("change", () => {{
-      if (storedTheme() !== "light" && storedTheme() !== "dark") syncButton();
+      if (storedTheme() !== "light" && storedTheme() !== "dark") {{
+        syncButton();
+        syncInteractiveFrames(systemTheme());
+      }}
+    }});
+
+    window.addEventListener("message", event => {{
+      if (event.origin !== location.origin || event.data?.type !== "interactive-resize") return;
+      document.querySelectorAll(".interactive-frame").forEach(frame => {{
+        if (frame.contentWindow === event.source) frame.style.height = `${{event.data.height}}px`;
+      }});
+    }});
+    document.querySelectorAll(".interactive-frame").forEach(frame => {{
+      frame.addEventListener("load", () => syncInteractiveFrames(currentTheme()));
     }});
 
     syncButton();
+    syncInteractiveFrames(currentTheme());
   }})();
 </script>
 </body>
