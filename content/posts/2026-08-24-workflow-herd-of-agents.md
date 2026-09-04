@@ -13,7 +13,7 @@ Consistency is what you want from a build system. It is not what you want from a
 
 It usually looks like two panes side by side. Same repo, same branch, same question. One agent says the change is safe to ship. The other says it is not, and gives a reason specific enough that I have to go and look.
 
-For a long time I thought my job in that moment was to work out which one was wrong. It is not. Two models have different training, different habits and different blind spots, so when they split on the same diff it usually means something in that change is genuinely ambiguous and I am the one who has not looked hard enough yet. Treating the second opinion as a stress test rather than a tie to break changed the shape of everything else.
+For a long time I thought my job in that moment was to work out which one was wrong. It is not. Two harnesses can arrive with different models, system instructions, context, tools and blind spots. When they split on the same diff, I treat it as evidence that something in the change deserves a closer look, not proof that one of them has found the truth. Treating the second opinion as a stress test rather than a tie to break changed the shape of everything else.
 
 Here is the rest of it: where the agents run, the guardrails around them, and how a vague ticket turns into code I am willing to send.
 
@@ -127,7 +127,7 @@ The tools shift under me constantly. A harness ships something that makes one of
 
 That is fine, and honestly it is most of the fun. Picking up a big feature and watching it come together through a process that is actually mature, while learning something new in the middle of doing it, is a good way to spend a week. The commands here will age badly. The habits underneath them, separate the context, specialise the agent, capture the process, review the result, are what I would carry to whatever replaces all of this.
 
-Which leaves the thing I think about most. All of this produces code faster than I can read it. One recent stretch was 372 files and roughly fifty-five thousand lines added.
+Which leaves the thing I think about most. All of this produces code faster than I can read it. One recent stretch touched hundreds of files and added tens of thousands of lines.
 
 I can review that. I am not sure I can understand it. That is the next post.
 

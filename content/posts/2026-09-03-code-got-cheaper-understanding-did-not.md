@@ -17,7 +17,7 @@ That is the whole essay, really. Not "the agent broke something." The agent did 
 
 Let me put a number on it, because the number is what made this concrete for me.
 
-One recent stretch of work: 372 files touched. Around fifty-five thousand lines added, three thousand removed. One human.
+One recent stretch of work touched hundreds of files and added tens of thousands of lines. One human.
 
 I could review that. Reviewing is a sampling exercise and always has been. I could open the important files, check the dangerous paths, run the tests, read the diff on anything touching money or auth, and sign off with a reasonably clear conscience.
 
@@ -27,7 +27,7 @@ But reviewing it and understanding it are not the same activity, and I had been 
 
 Here is the argument against worrying about this, and it is a strong one, so I want to state it properly rather than knock over a strawman.
 
-Agents are getting measurably better at checking their own work. They write the test, run it, watch it fail, fix it, run it again. They catch their own type errors before I see them. Give one a second agent as a reviewer and the pair catches things I would have missed on a tired Friday. This is genuinely good and I have no interest in pretending otherwise. I like it when my agent does not make mistakes.
+The agents I use have become noticeably better at checking their own work. They write the test, run it, watch it fail, fix it, run it again. They catch their own type errors before I see them. Give one a second agent as a reviewer and the pair catches things I would have missed on a tired Friday. This is genuinely good and I have no interest in pretending otherwise. I like it when my agent does not make mistakes.
 
 And the second half of the argument is even harder to answer: you do not read every line of every library you import. Nobody does. You trust the interface, the tests, and the blast radius. Software has always run on layers of things we use without understanding, and it has mostly worked out.
 
