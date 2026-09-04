@@ -169,6 +169,8 @@ def render_base(page_title: str, content: str, description: str = "") -> str:
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="{escape_attr(description)}">
+  <meta property="og:title" content="{escape_attr(page_title)}">
+  <meta property="og:description" content="{escape_attr(description)}">
   <meta name="color-scheme" content="light dark">
   <title>{html.escape(title)}</title>
   <script>
