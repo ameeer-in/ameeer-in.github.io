@@ -67,7 +67,7 @@ Before anything gets sent, I make the change explain itself to me. Not the diff.
 
 Instead: why this change exists, before a single line of code. Then the shape of the solution in one paragraph. Then the code in the order a person would learn it, which is almost never the order the files are in. Then five questions about it that I answer without asking the agent.
 
-That last part is not a habit I rely on remembering. It is [a skill I run](https://github.com/ameeer-in/agent-skills/blob/main/skills/explain-diff/explain-diff-html.md), and it writes the whole thing out as one page with the quiz as actual multiple choice at the bottom, so I cannot quietly award myself a pass on questions I only half know.
+That last part is not a habit I rely on remembering. It is [a skill I run](https://github.com/ameeer-in/agent-skills/blob/main/skills/explain-diff/SKILL.md), and it writes the whole thing out as one page with the quiz as actual multiple choice at the bottom, so I cannot quietly award myself a pass on questions I only half know.
 
 If I cannot answer them, I am not done reading. That is the whole rule and it is not negotiable, mostly because I have already caught myself trying to negotiate with it.
 
